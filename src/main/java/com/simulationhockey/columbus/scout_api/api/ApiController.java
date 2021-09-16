@@ -1,10 +1,13 @@
 package com.simulationhockey.columbus.scout_api.api;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
 import com.simulationhockey.columbus.scout_api.api.commenters.Commenters;
 import com.simulationhockey.columbus.scout_api.api.commenters.CommentersRepository;
+import com.simulationhockey.columbus.scout_api.api.teamcomments.TeamComments;
+import com.simulationhockey.columbus.scout_api.api.teamcomments.TeamCommentsRepository;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformationRepository;
 import com.simulationhockey.columbus.scout_api.api.userstatus.UserStatus;
@@ -28,7 +31,11 @@ public class ApiController {
     @Autowired
     private UserStatusRepository userStatusRepository;
 
-    @Autowired CommentersRepository commentersRepository;
+    @Autowired 
+    private CommentersRepository commentersRepository;
+
+    @Autowired
+    private TeamCommentsRepository teamCommentsRepository;
 
     // user information mappings
     @PostMapping(path="/user/add")
@@ -110,6 +117,10 @@ public class ApiController {
     public @ResponseBody String addUserStatus(@PathVariable Integer userId,
         @RequestParam Boolean want, @RequestParam Boolean avoid, @RequestParam Boolean drafted) {
         
+        if (!isUserPresent(userId)) {
+            return "ERROR: User does not exist";
+        }
+
         List<UserStatus> existingStatus = userStatusRepository.findByUserId(userId);
         // check if the status already exists.  If it does, don't continue
         if (existingStatus.size() > 0) {
@@ -184,5 +195,59 @@ public class ApiController {
     @GetMapping(path="/commenters/all")
     public @ResponseBody Iterable<Commenters> getAllCommenters() {
         return commentersRepository.findAll();
+    }
+
+    // comments mappings
+    @PostMapping(path="/user/{userId}/comment/add")
+    public @ResponseBody String addNewComment(@PathVariable Integer userId,
+        @RequestParam Integer commenterId, @RequestParam String comment) {
+        
+        if (!isUserPresent(userId)) {
+            return "ERROR: User does not exist";
+        }
+
+        Optional<Commenters> commenter = commentersRepository.findById(commenterId);
+        if (!commenter.isPresent()) {
+            return "ERROR: Commenter does not exist";
+        }
+        TeamComments teamComment = new TeamComments();
+        teamComment.setUserId(userId);
+        teamComment.setCommenterId(commenterId);
+        teamComment.setComment(comment);
+
+        teamCommentsRepository.save(teamComment);
+        return "OK";
+    }
+
+    @PostMapping(path="/user/{userId}/comment/{commentId}/update")
+    public @ResponseBody String updateComment(@PathVariable Integer userId, @PathVariable Integer commentId,
+        @RequestParam Integer commenterId, @RequestParam String comment) {
+        
+        if (!isUserPresent(userId)) {
+            return "ERROR: User does not exist";
+        }
+
+        Optional<TeamComments> teamComments = teamCommentsRepository.findById(commentId);
+        
+        if (!teamComments.isPresent()) {
+            return "ERROR: Comment doesn't exist";
+        }
+
+        TeamComments teamComment = teamComments.get();
+        teamComment.setComment(comment);
+
+        teamCommentsRepository.save(teamComment);
+        return "OK";
+    }
+
+    @GetMapping(path="/user/{userId}/comment/all")
+    public @ResponseBody Optional<TeamComments> getUserComments(@PathVariable Integer userId) {
+        return teamCommentsRepository.findById(userId);
+    }
+
+    // misc tools
+    private Boolean isUserPresent(Integer id) {
+        Optional<UserInformation> user = userInformationRepository.findById(id);
+        return user.isPresent();
     }
 }
