@@ -1,4 +1,4 @@
-package com.simulationhockey.columbus.scout_api.api;
+package com.simulationhockey.columbus.scout_api.api.UserInformation;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

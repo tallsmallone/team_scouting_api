@@ -1,5 +1,8 @@
 package com.simulationhockey.columbus.scout_api.api;
 
+import com.simulationhockey.columbus.scout_api.api.UserInformation.UserInformation;
+import com.simulationhockey.columbus.scout_api.api.UserInformation.UserInformationRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +17,7 @@ public class ApiController {
     @Autowired
     private UserInformationRepository userInformationRepository;
 
-    @PostMapping(path="/add")
+    @PostMapping(path="/user/add")
     public @ResponseBody String addNewUser(@RequestParam String username, 
         @RequestParam String player_last_name, @RequestParam String player_first_name,
         @RequestParam String position, @RequestParam String team, @RequestParam String discord_username,
@@ -37,7 +40,7 @@ public class ApiController {
             return "Saved";
         }
 
-    @GetMapping(path="/all")
+    @GetMapping(path="/user/all")
     public @ResponseBody Iterable<UserInformation> getAllUsers() {
         return userInformationRepository.findAll();
     }
