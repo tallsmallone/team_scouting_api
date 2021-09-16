@@ -14,14 +14,14 @@ public class UserInformation {
     private Integer id;
 
     private String username;
-    private String player_last_name;
-    private String player_first_name;
+    private String playerLastName;
+    private String playerFirstName;
     private String position;
     private String team;
-    private String discord_username;
+    private String discordUsername;
     private Integer tpe;
     private String joined;
-    private String last_visit;
+    private String lastVisit;
     private Boolean active;
     private Boolean contacted;
 
@@ -35,11 +35,11 @@ public class UserInformation {
     }
 
     public String getPlayerLastName() {
-        return this.player_last_name;
+        return this.playerLastName;
     }
 
     public String getPlayerFirstName() {
-        return this.player_first_name;
+        return this.playerFirstName;
     }
 
     public String getPosition() {
@@ -51,7 +51,7 @@ public class UserInformation {
     }
 
     public String getDiscordUsername() {
-        return this.discord_username;
+        return this.discordUsername;
     }
 
     public Integer getTpe() {
@@ -63,7 +63,7 @@ public class UserInformation {
     }
 
     public String getLastVisit() {
-        return this.last_visit;
+        return this.lastVisit;
     }
 
     public Boolean getActive() {
@@ -83,12 +83,12 @@ public class UserInformation {
         this.username = username;
     }
 
-    public void setPlayerLastName(String player_last_name) {
-        this.player_last_name = player_last_name;
+    public void setPlayerLastName(String playerLastName) {
+        this.playerLastName = playerLastName;
     }
 
-    public void setPlayerFirstName(String player_first_name) {
-        this.player_first_name = player_first_name;
+    public void setPlayerFirstName(String playerFirstName) {
+        this.playerFirstName = playerFirstName;
     }
 
     public void setPosition(String position) {
@@ -99,8 +99,8 @@ public class UserInformation {
         this.team = team;
     }
 
-    public void setDiscordUsername(String discord_username) {
-        this.discord_username = discord_username;
+    public void setDiscordUsername(String discordUsername) {
+        this.discordUsername = discordUsername;
     }
 
     public void setTpe(Integer tpe) {
@@ -111,8 +111,8 @@ public class UserInformation {
         this.joined = joined;
     }
 
-    public void setLastVisit(String last_visit) {
-        this.last_visit = last_visit;
+    public void setLastVisit(String lastVisit) {
+        this.lastVisit = lastVisit;
     }
 
     public void setActive(Boolean active) {

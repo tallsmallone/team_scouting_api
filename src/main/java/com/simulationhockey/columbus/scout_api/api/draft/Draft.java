@@ -13,9 +13,9 @@ public class Draft {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private Integer user_id;
-    private String draft_team;
-    private Integer draft_pick;
+    private Integer userId;
+    private String draftTeam;
+    private Integer draftPick;
 
     // Getters
     public Integer getId(){
@@ -23,15 +23,15 @@ public class Draft {
     }
 
     public Integer getUserId(){
-        return this.user_id;
+        return this.userId;
     }
 
     public String getDraftTeam(){
-        return this.draft_team;
+        return this.draftTeam;
     }
 
     public Integer getDraftPick(){
-        return this.draft_pick;
+        return this.draftPick;
     }
 
     // Setters
@@ -39,15 +39,15 @@ public class Draft {
         this.id = id;
     }
 
-    public void setUserId(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setDraftTeam(String draft_team) {
-        this.draft_team = draft_team;
+    public void setDraftTeam(String draftTeam) {
+        this.draftTeam = draftTeam;
     }
 
-    public void setDraftPick(Integer draft_pick) {
-        this.draft_pick = draft_pick;
+    public void setDraftPick(Integer draftPick) {
+        this.draftPick = draftPick;
     }    
 }

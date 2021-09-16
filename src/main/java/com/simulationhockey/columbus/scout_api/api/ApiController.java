@@ -1,5 +1,6 @@
 package com.simulationhockey.columbus.scout_api.api;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
@@ -22,20 +23,20 @@ public class ApiController {
 
     @PostMapping(path="/user/add")
     public @ResponseBody String addNewUser(@RequestParam String username, 
-        @RequestParam String player_last_name, @RequestParam String player_first_name,
-        @RequestParam String position, @RequestParam String team, @RequestParam String discord_username,
-        @RequestParam Integer tpe, @RequestParam String joined, @RequestParam String last_visit,
+        @RequestParam String playerLastName, @RequestParam String playerFirstName,
+        @RequestParam String position, @RequestParam String team, @RequestParam String discordUsername,
+        @RequestParam Integer tpe, @RequestParam String joined, @RequestParam String lastVisit,
         @RequestParam Boolean active, @RequestParam Boolean contacted) {
             UserInformation user = new UserInformation();
             user.setUsername(username);
-            user.setPlayerLastName(player_last_name);
-            user.setPlayerFirstName(player_first_name);
+            user.setPlayerLastName(playerLastName);
+            user.setPlayerFirstName(playerFirstName);
             user.setPosition(position);
             user.setTeam(team);
-            user.setDiscordUsername(discord_username);
+            user.setDiscordUsername(discordUsername);
             user.setTpe(tpe);
             user.setJoined(joined);
-            user.setLastVisit(last_visit);
+            user.setLastVisit(lastVisit);
             user.setActive(active);
             user.setContacted(contacted);
             userInformationRepository.save(user);
@@ -54,7 +55,7 @@ public class ApiController {
     }
 
     @GetMapping(path="/user/username/{username}")
-    public @ResponseBody Iterable<UserInformation> getUserByUsername(@PathVariable String username) {
+    public @ResponseBody List<UserInformation> getUserByUsername(@PathVariable String username) {
         return userInformationRepository.findByUsername(username);
     }
 }

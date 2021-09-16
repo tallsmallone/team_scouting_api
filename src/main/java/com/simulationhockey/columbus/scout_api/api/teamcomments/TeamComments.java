@@ -13,8 +13,8 @@ public class TeamComments {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private Integer user_id;
-    private Integer commenter_id;
+    private Integer userId;
+    private Integer commenterId;
     private String comment;
 
     // Getters
@@ -23,11 +23,11 @@ public class TeamComments {
     }
 
     public Integer getUserId(){
-        return this.user_id;
+        return this.userId;
     }
 
     public Integer getCommenterId(){
-        return this.commenter_id;
+        return this.commenterId;
     }
 
     public String getComment(){
@@ -39,12 +39,12 @@ public class TeamComments {
         this.id = id;
     }
 
-    public void setUserId(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public void setCommenterId(Integer commenter_id) {
-        this.commenter_id = commenter_id;
+    public void setCommenterId(Integer commenterId) {
+        this.commenterId = commenterId;
     }
 
     public void setComment(String comment) {

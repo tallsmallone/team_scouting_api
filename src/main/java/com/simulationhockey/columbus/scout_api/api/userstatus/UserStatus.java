@@ -13,7 +13,7 @@ public class UserStatus {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private Integer user_id;
+    private Integer userId;
     private Boolean want;
     private Boolean avoid;
     private Boolean drafted;
@@ -24,7 +24,7 @@ public class UserStatus {
     }
 
     public Integer getUserId(){
-        return this.user_id;
+        return this.userId;
     }
 
     public Boolean getWant(){
@@ -44,8 +44,8 @@ public class UserStatus {
         this.id = id;
     }
 
-    public void setUserId(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public void setWant(Boolean want) {
