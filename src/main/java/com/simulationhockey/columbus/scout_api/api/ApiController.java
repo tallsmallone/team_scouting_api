@@ -33,22 +33,58 @@ public class ApiController {
         @RequestParam String position, @RequestParam String team, @RequestParam String discordUsername,
         @RequestParam Integer tpe, @RequestParam String joined, @RequestParam String lastVisit,
         @RequestParam Boolean active, @RequestParam Boolean contacted) {
-            UserInformation user = new UserInformation();
-            user.setUsername(username);
-            user.setPlayerLastName(playerLastName);
-            user.setPlayerFirstName(playerFirstName);
-            user.setPosition(position);
-            user.setTeam(team);
-            user.setDiscordUsername(discordUsername);
-            user.setTpe(tpe);
-            user.setJoined(joined);
-            user.setLastVisit(lastVisit);
-            user.setActive(active);
-            user.setContacted(contacted);
-            userInformationRepository.save(user);
-
-            return "OK";
+        
+        List<UserInformation> existingUser = userInformationRepository.findByUsername(username);
+        // check if the status already exists.  If it does, don't continue
+        if (existingUser.size() > 0) {
+            return "ERROR: user information already present";
         }
+
+        UserInformation user = new UserInformation();
+        user.setUsername(username);
+        user.setPlayerLastName(playerLastName);
+        user.setPlayerFirstName(playerFirstName);
+        user.setPosition(position);
+        user.setTeam(team);
+        user.setDiscordUsername(discordUsername);
+        user.setTpe(tpe);
+        user.setJoined(joined);
+        user.setLastVisit(lastVisit);
+        user.setActive(active);
+        user.setContacted(contacted);
+        userInformationRepository.save(user);
+
+        return "OK";
+    }
+
+    @PostMapping(path="/user/update")
+    public @ResponseBody String updateNewUser(@RequestParam String username, 
+        @RequestParam String playerLastName, @RequestParam String playerFirstName,
+        @RequestParam String position, @RequestParam String team, @RequestParam String discordUsername,
+        @RequestParam Integer tpe, @RequestParam String joined, @RequestParam String lastVisit,
+        @RequestParam Boolean active, @RequestParam Boolean contacted) {
+        
+        List<UserInformation> existingUser = userInformationRepository.findByUsername(username);
+        // check if the status already exists.  If it does, don't continue
+        if (existingUser.size() < 1) {
+            return "ERROR: user information not present";
+        }
+
+        UserInformation user = existingUser.get(0);
+        user.setPlayerLastName(playerLastName);
+        user.setPlayerFirstName(playerFirstName);
+        user.setPosition(position);
+        user.setTeam(team);
+        user.setDiscordUsername(discordUsername);
+        user.setTpe(tpe);
+        user.setJoined(joined);
+        user.setLastVisit(lastVisit);
+        user.setActive(active);
+        user.setContacted(contacted);
+        userInformationRepository.save(user);
+
+        return "OK";
+    }
 
     @GetMapping(path="/user/all")
     public @ResponseBody Iterable<UserInformation> getAllUsers() {
