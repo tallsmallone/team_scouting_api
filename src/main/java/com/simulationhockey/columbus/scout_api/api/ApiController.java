@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformationRepository;
+import com.simulationhockey.columbus.scout_api.api.userstatus.UserStatus;
+import com.simulationhockey.columbus.scout_api.api.userstatus.UserStatusRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,10 @@ public class ApiController {
     @Autowired
     private UserInformationRepository userInformationRepository;
 
+    @Autowired
+    private UserStatusRepository userStatusRepository;
+
+    // user information mappings
     @PostMapping(path="/user/add")
     public @ResponseBody String addNewUser(@RequestParam String username, 
         @RequestParam String playerLastName, @RequestParam String playerFirstName,
@@ -41,7 +47,7 @@ public class ApiController {
             user.setContacted(contacted);
             userInformationRepository.save(user);
 
-            return "Saved";
+            return "OK";
         }
 
     @GetMapping(path="/user/all")
@@ -57,5 +63,50 @@ public class ApiController {
     @GetMapping(path="/user/username/{username}")
     public @ResponseBody List<UserInformation> getUserByUsername(@PathVariable String username) {
         return userInformationRepository.findByUsername(username);
+    }
+
+    // user status mappings
+    @PostMapping(path="/user/{userId}/status/add")
+    public @ResponseBody String addUserStatus(@PathVariable Integer userId,
+        @RequestParam Boolean want, @RequestParam Boolean avoid, @RequestParam Boolean drafted) {
+        
+        List<UserStatus> existingStatus = userStatusRepository.findByUserId(userId);
+        // check if the status already exists.  If it does, don't continue
+        if (existingStatus.size() > 0) {
+            return "ERROR: user status already present";
+        }
+
+        UserStatus status = new UserStatus();
+        status.setUserId(userId);
+        status.setWant(want);
+        status.setAvoid(avoid);
+        status.setDrafted(drafted);
+        userStatusRepository.save(status);
+
+        return "OK";
+    }
+
+    @PostMapping(path="/user/{userId}/status/update")
+    public @ResponseBody String updateUserStatus(@PathVariable Integer userId,
+        @RequestParam Boolean want, @RequestParam Boolean avoid, @RequestParam Boolean drafted) {
+        
+        List<UserStatus> existingStatus = userStatusRepository.findByUserId(userId);
+        // check if the status already exists.  If it does not, don't continue
+        if (existingStatus.size() < 1) {
+            return "ERROR: user status not present";
+        }
+
+        UserStatus status = existingStatus.get(0);
+        status.setWant(want);
+        status.setAvoid(avoid);
+        status.setDrafted(drafted);
+        userStatusRepository.save(status);
+
+        return "OK";
+    }
+
+    @GetMapping(path="/user/{userId}/status")
+    public @ResponseBody List<UserStatus> getUserStatus(@PathVariable Integer userId) {
+        return userStatusRepository.findByUserId(userId);
     }
 }
