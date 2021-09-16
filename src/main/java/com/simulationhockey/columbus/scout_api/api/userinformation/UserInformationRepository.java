@@ -1,4 +1,4 @@
-package com.simulationhockey.columbus.scout_api.api.UserInformation;
+package com.simulationhockey.columbus.scout_api.api.userinformation;
 
 import org.springframework.data.repository.CrudRepository;
 

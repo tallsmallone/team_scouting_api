@@ -1,7 +1,7 @@
 package com.simulationhockey.columbus.scout_api.api;
 
-import com.simulationhockey.columbus.scout_api.api.UserInformation.UserInformation;
-import com.simulationhockey.columbus.scout_api.api.UserInformation.UserInformationRepository;
+import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
+import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
