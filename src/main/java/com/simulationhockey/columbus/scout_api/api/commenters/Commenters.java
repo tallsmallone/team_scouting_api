@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="draft")
+@Table(name="commenters")
 public class Commenters {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +28,7 @@ public class Commenters {
     public void setId(Integer id) {
         this.id = id;
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
