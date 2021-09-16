@@ -1,11 +1,14 @@
 package com.simulationhockey.columbus.scout_api.api;
 
+import java.util.Optional;
+
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,5 +46,10 @@ public class ApiController {
     @GetMapping(path="/user/all")
     public @ResponseBody Iterable<UserInformation> getAllUsers() {
         return userInformationRepository.findAll();
+    }
+
+    @GetMapping(path="/user/{id}")
+    public @ResponseBody Optional<UserInformation> getSingleUser(@PathVariable Integer id) {
+        return userInformationRepository.findById(id);
     }
 }
