@@ -96,6 +96,24 @@ public class ApiController {
         return "OK";
     }
 
+    @PostMapping(path="/user/{id}/delete")
+    public @ResponseBody String deleteUser(@PathVariable Integer id, @RequestParam String username, 
+        @RequestParam String playerLastName, @RequestParam String playerFirstName,
+        @RequestParam String position, @RequestParam String team, @RequestParam String discordUsername,
+        @RequestParam Integer tpe, @RequestParam String joined, @RequestParam String lastVisit,
+        @RequestParam Boolean active, @RequestParam Boolean contacted) {
+        
+        Optional<UserInformation> existingUser = userInformationRepository.findById(id);
+        // check if the status already exists.  If it does, don't continue
+        if (!existingUser.isPresent()) {
+            return "ERROR: user information not present";
+        }
+
+        userInformationRepository.delete(existingUser.get());
+
+        return "OK";
+    }
+
     @GetMapping(path="/user/all")
     public @ResponseBody Iterable<UserInformation> getAllUsers() {
         return userInformationRepository.findAll();
@@ -155,6 +173,21 @@ public class ApiController {
         return "OK";
     }
 
+    @PostMapping(path="/user/{userId}/status/delete")
+    public @ResponseBody String deleteUserStatus(@PathVariable Integer userId,
+        @RequestParam Boolean want, @RequestParam Boolean avoid, @RequestParam Boolean drafted) {
+        
+        List<UserStatus> existingStatus = userStatusRepository.findByUserId(userId);
+        // check if the status already exists.  If it does not, don't continue
+        if (existingStatus.size() < 1) {
+            return "ERROR: user status not present";
+        }
+
+        userStatusRepository.delete(existingStatus.get(0));
+
+        return "OK";
+    }
+
     @GetMapping(path="/user/{userId}/status")
     public @ResponseBody List<UserStatus> getUserStatus(@PathVariable Integer userId) {
         return userStatusRepository.findByUserId(userId);
@@ -187,6 +220,19 @@ public class ApiController {
         Commenters commenter = commenters.get();
         commenter.setUsername(username);
         commentersRepository.save(commenter);
+
+        return "OK";
+    }
+
+    @PostMapping(path="/commenters/{id}/delete")
+    public @ResponseBody String deleteCommenter(@PathVariable Integer id, @RequestParam String username) {
+        Optional<Commenters> commenters = commentersRepository.findById(id);
+        // check if the status already exists.  If it does, don't continue
+        if (!commenters.isPresent()) {
+            return "ERROR: commenter does not exist";
+        }
+        
+        commentersRepository.delete(commenters.get());
 
         return "OK";
     }
@@ -236,6 +282,24 @@ public class ApiController {
         teamComment.setComment(comment);
 
         teamCommentsRepository.save(teamComment);
+        return "OK";
+    }
+
+    @PostMapping(path="/user/{userId}/comment/{commentId}/delete")
+    public @ResponseBody String deleteComment(@PathVariable Integer userId, @PathVariable Integer commentId,
+        @RequestParam Integer commenterId, @RequestParam String comment) {
+        
+        if (!isUserPresent(userId)) {
+            return "ERROR: User does not exist";
+        }
+
+        Optional<TeamComments> teamComments = teamCommentsRepository.findById(commentId);
+        
+        if (!teamComments.isPresent()) {
+            return "ERROR: Comment doesn't exist";
+        }
+
+        teamCommentsRepository.delete(teamComments.get());
         return "OK";
     }
 
