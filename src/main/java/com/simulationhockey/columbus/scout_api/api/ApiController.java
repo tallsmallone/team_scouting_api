@@ -52,4 +52,9 @@ public class ApiController {
     public @ResponseBody Optional<UserInformation> getSingleUser(@PathVariable Integer id) {
         return userInformationRepository.findById(id);
     }
+
+    @GetMapping(path="/user/username/{username}")
+    public @ResponseBody Iterable<UserInformation> getUserByUsername(@PathVariable String username) {
+        return userInformationRepository.findByUsername(username);
+    }
 }
