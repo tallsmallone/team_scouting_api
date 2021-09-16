@@ -180,4 +180,9 @@ public class ApiController {
 
         return "OK";
     }
+
+    @GetMapping(path="/commenters/all")
+    public @ResponseBody Iterable<Commenters> getAllCommenters() {
+        return commentersRepository.findAll();
+    }
 }
