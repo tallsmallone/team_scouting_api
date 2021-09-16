@@ -3,6 +3,8 @@ package com.simulationhockey.columbus.scout_api.api;
 import java.util.List;
 import java.util.Optional;
 
+import com.simulationhockey.columbus.scout_api.api.commenters.Commenters;
+import com.simulationhockey.columbus.scout_api.api.commenters.CommentersRepository;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformationRepository;
 import com.simulationhockey.columbus.scout_api.api.userstatus.UserStatus;
@@ -25,6 +27,8 @@ public class ApiController {
 
     @Autowired
     private UserStatusRepository userStatusRepository;
+
+    @Autowired CommentersRepository commentersRepository;
 
     // user information mappings
     @PostMapping(path="/user/add")
@@ -57,20 +61,20 @@ public class ApiController {
         return "OK";
     }
 
-    @PostMapping(path="/user/update")
-    public @ResponseBody String updateNewUser(@RequestParam String username, 
+    @PostMapping(path="/user/{id}/update")
+    public @ResponseBody String updateNewUser(@PathVariable Integer id, @RequestParam String username, 
         @RequestParam String playerLastName, @RequestParam String playerFirstName,
         @RequestParam String position, @RequestParam String team, @RequestParam String discordUsername,
         @RequestParam Integer tpe, @RequestParam String joined, @RequestParam String lastVisit,
         @RequestParam Boolean active, @RequestParam Boolean contacted) {
         
-        List<UserInformation> existingUser = userInformationRepository.findByUsername(username);
+        Optional<UserInformation> existingUser = userInformationRepository.findById(id);
         // check if the status already exists.  If it does, don't continue
-        if (existingUser.size() < 1) {
+        if (!existingUser.isPresent()) {
             return "ERROR: user information not present";
         }
 
-        UserInformation user = existingUser.get(0);
+        UserInformation user = existingUser.get();
         user.setPlayerLastName(playerLastName);
         user.setPlayerFirstName(playerFirstName);
         user.setPosition(position);
@@ -144,5 +148,36 @@ public class ApiController {
     @GetMapping(path="/user/{userId}/status")
     public @ResponseBody List<UserStatus> getUserStatus(@PathVariable Integer userId) {
         return userStatusRepository.findByUserId(userId);
+    }
+
+    // commenter mappings
+    @PostMapping(path="/commenters/add")
+    public @ResponseBody String addCommenter(@RequestParam String username) {
+        List<Commenters> commenters = commentersRepository.findByUsername(username);
+        // check if the status already exists.  If it does, don't continue
+        if (commenters.size() > 0) {
+            return "ERROR: commenter already present";
+        }
+        
+        Commenters commenter = new Commenters();
+        commenter.setUsername(username);
+        commentersRepository.save(commenter);
+
+        return "OK";
+    }
+
+    @PostMapping(path="/commenters/{id}/update")
+    public @ResponseBody String updateCommenter(@PathVariable Integer id, @RequestParam String username) {
+        Optional<Commenters> commenters = commentersRepository.findById(id);
+        // check if the status already exists.  If it does, don't continue
+        if (!commenters.isPresent()) {
+            return "ERROR: commenter does not exist";
+        }
+        
+        Commenters commenter = commenters.get();
+        commenter.setUsername(username);
+        commentersRepository.save(commenter);
+
+        return "OK";
     }
 }
