@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.simulationhockey.columbus.scout_api.api.commenters.Commenters;
 import com.simulationhockey.columbus.scout_api.api.commenters.CommentersRepository;
+import com.simulationhockey.columbus.scout_api.api.draft.Draft;
+import com.simulationhockey.columbus.scout_api.api.draft.DraftRepository;
 import com.simulationhockey.columbus.scout_api.api.teamcomments.TeamComments;
 import com.simulationhockey.columbus.scout_api.api.teamcomments.TeamCommentsRepository;
 import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformation;
@@ -35,6 +37,9 @@ public class ApiController {
 
     @Autowired
     private TeamCommentsRepository teamCommentsRepository;
+
+    @Autowired
+    private DraftRepository draftRepository;
 
     // user information mappings
     @PostMapping(path="/user/add")
@@ -306,6 +311,69 @@ public class ApiController {
     @GetMapping(path="/user/{userId}/comment/all")
     public @ResponseBody Optional<TeamComments> getUserComments(@PathVariable Integer userId) {
         return teamCommentsRepository.findById(userId);
+    }
+
+    // draft end points
+    @PostMapping(path="/user/{userId}/draft/add")
+    public @ResponseBody String addDraftInformation(@PathVariable Integer userId,
+        @RequestParam String draftTeam, @RequestParam Integer draftPick) {
+
+            if (!isUserPresent(userId)) {
+                return "ERROR: User does not exist";
+            }
+    
+            List<Draft> draftInfo = draftRepository.findByUserId(userId);
+            if (draftInfo.size() > 0) {
+                return "ERROR: Draft info already exists";
+            }
+
+            Draft draft = new Draft();
+            draft.setUserId(userId);
+            draft.setDraftTeam(draftTeam);
+            draft.setDraftPick(draftPick);
+
+            draftRepository.save(draft);
+
+            return "OK";
+        }
+
+    @PostMapping(path="/user/{userId}/draft/update")
+    public @ResponseBody String updateDraft(@PathVariable Integer userId,
+        @RequestParam String draftTeam, @RequestParam Integer draftPick) {
+        
+        if (!isUserPresent(userId)) {
+            return "ERROR: User does not exist";
+        }
+
+        List<Draft> draftInfo = draftRepository.findByUserId(userId);
+        
+        if (draftInfo.size() < 1) {
+            return "ERROR: Draft info does not exist";
+        }
+
+        Draft draft = draftInfo.get(1);
+        draft.setDraftTeam(draftTeam);
+        draft.setDraftPick(draftPick);
+
+        draftRepository.save(draft);
+        return "OK";
+    }
+
+    @PostMapping(path="/user/{userId}/draft/delete")
+    public @ResponseBody String deleteDraft(@PathVariable Integer userId) {
+        
+        if (!isUserPresent(userId)) {
+            return "ERROR: User does not exist";
+        }
+
+        List<Draft> draftInfo = draftRepository.findByUserId(userId);
+        
+        if (draftInfo.size() < 1) {
+            return "ERROR: Draft info does not exist";
+        }
+
+        draftRepository.delete(draftInfo.get(1));
+        return "OK";
     }
 
     // misc tools
