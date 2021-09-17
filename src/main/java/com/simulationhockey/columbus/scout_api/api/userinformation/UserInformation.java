@@ -24,6 +24,10 @@ public class UserInformation {
     private String lastVisit;
     private Boolean active;
     private Boolean contacted;
+    private Boolean want;
+    private Boolean avoid;
+    private Boolean drafted;
+    private Integer draftPick;
 
     // Getters
     public Integer getId() {
@@ -74,6 +78,22 @@ public class UserInformation {
         return this.contacted;
     }
 
+    public Boolean getWant() {
+        return this.want;
+    }
+
+    public Boolean getAvoid() {
+        return this.avoid;
+    }
+
+    public Boolean getDrafted() {
+        return this.drafted;
+    }
+
+    public Integer getDraftPick() {
+        return this.draftPick;
+    }
+
     // Setters
     public void setId(Integer id) {
         this.id = id;
@@ -121,5 +141,21 @@ public class UserInformation {
 
     public void setContacted(Boolean contacted) {
         this.contacted = contacted;
+    }
+
+    public void setWant(Boolean want) {
+        this.want = want;
+    }
+
+    public void setAvoid(Boolean avoid) {
+        this.avoid = avoid;
+    }
+
+    public void setDrafted(Boolean drafted) {
+        this.drafted = drafted;
+    }
+
+    public void setDraftPick(Integer draftPick) {
+        this.draftPick = draftPick;
     }
 }
