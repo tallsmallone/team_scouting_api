@@ -1,7 +1,6 @@
 package com.simulationhockey.columbus.scout_api.api;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.simulationhockey.columbus.scout_api.api.commenters.Commenters;
 import com.simulationhockey.columbus.scout_api.api.commenters.CommentersRepository;
