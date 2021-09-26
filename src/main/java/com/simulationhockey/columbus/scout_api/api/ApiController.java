@@ -12,15 +12,15 @@ import com.simulationhockey.columbus.scout_api.api.userinformation.UserInformati
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping(path="/api/v1")
 public class ApiController {
     @Autowired
@@ -32,17 +32,6 @@ public class ApiController {
     @Autowired
     private TeamCommentsRepository teamCommentsRepository;
 
-    // Test functions
-    @PostMapping(path="/test")
-    public @ResponseBody ResponseEntity<String> test(@RequestBody String username) {
-        return ResponseEntity.status(HttpStatus.OK).body(username);
-    }
-
-    @PostMapping(path="/test2")
-    public @ResponseBody String test2(@RequestBody String username) {
-        return "username";
-    }
-
     // user information mappings
     @PostMapping(path="/user/add")
     public @ResponseBody ResponseEntity<String> addNewUser(@RequestBody UserInformation user) {
@@ -52,9 +41,6 @@ public class ApiController {
         if (existingUser.size() > 0) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User already exists!");
         }
-
-
-        System.out.print("test");
 
         userInformationRepository.addUserInformation(
             user.getUsername(),
@@ -74,8 +60,7 @@ public class ApiController {
             user.getDraftPick()
         );
 
-        System.out.print("tesrtyt");
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path="/user/{id}/update")
@@ -105,7 +90,7 @@ public class ApiController {
             user.getDraftPick()
         );
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path="/user/{id}/delete")
@@ -117,7 +102,7 @@ public class ApiController {
 
         userInformationRepository.deleteUserInformation(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path="/user/all")
@@ -146,7 +131,7 @@ public class ApiController {
 
         commentersRepository.addCommenter(commenter.getUsername());
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path="/commenters/{id}/update")
@@ -158,7 +143,7 @@ public class ApiController {
 
         commentersRepository.updateCommenter(id, commenter.getUsername());
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path="/commenters/{id}/delete")
@@ -170,7 +155,7 @@ public class ApiController {
 
         commentersRepository.deleteCommenter(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path="/commenters/all")
@@ -180,7 +165,7 @@ public class ApiController {
 
     // comments mappings
     @PostMapping(path="/user/{userId}/comment/add")
-    public @ResponseBody ResponseEntity<String> addNewComment(@PathVariable Integer userId,
+    public ResponseEntity<String> addNewComment(@PathVariable Integer userId,
         @RequestBody TeamComments teamComments) {
 
         if (!isUserPresent(userId)) {
@@ -193,7 +178,7 @@ public class ApiController {
 
         teamCommentsRepository.addComment(userId, teamComments.getCommenterId(), teamComments.getComment());
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path="/user/{userId}/comment/{commentId}/update")
@@ -210,7 +195,7 @@ public class ApiController {
 
         teamCommentsRepository.updateComment(commentId, userId, teamComments.getCommenterId(), teamComments.getComment());
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(path="/user/{userId}/comment/{commentId}/delete")
@@ -226,7 +211,7 @@ public class ApiController {
 
         teamCommentsRepository.deleteComment(commentId);
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path="/user/{userId}/comment/all")
